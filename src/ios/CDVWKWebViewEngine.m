@@ -77,6 +77,18 @@
     configuration.mediaPlaybackRequiresUserAction = [settings cordovaBoolSettingForKey:@"MediaPlaybackRequiresUserAction" defaultValue:YES];
     configuration.suppressesIncrementalRendering = [settings cordovaBoolSettingForKey:@"SuppressesIncrementalRendering" defaultValue:NO];
     configuration.mediaPlaybackAllowsAirPlay = [settings cordovaBoolSettingForKey:@"MediaPlaybackAllowsAirPlay" defaultValue:YES];
+    
+    // allow access to file api
+    @try {
+      [configuration.preferences setValue:@TRUE forKey:@"allowFileAccessFromFileURLs"];
+    }
+    @catch (NSException *exception) {}
+
+    @try {
+      [configuration setValue:@TRUE forKey:@"allowUniversalAccessFromFileURLs"];
+    }
+    @catch (NSException *exception) {}
+    
     return configuration;
 }
 
@@ -246,8 +258,6 @@ static void * KVOContext = &KVOContext;
      wkWebView.configuration.preferences.javaScriptEnabled = [settings cordovaBoolSettingForKey:@"JavaScriptEnabled" default:YES];
      wkWebView.configuration.preferences.javaScriptCanOpenWindowsAutomatically = [settings cordovaBoolSettingForKey:@"JavaScriptCanOpenWindowsAutomatically" default:NO];
      */
-
-    [wkWebView.configuration.preferences setValue:@YES forKey:@"allowFileAccessFromFileURLs"];
 
     // By default, DisallowOverscroll is false (thus bounce is allowed)
     BOOL bounceAllowed = !([settings cordovaBoolSettingForKey:@"DisallowOverscroll" defaultValue:NO]);
