@@ -17,7 +17,9 @@
 #         under the License.
 -->
 
-[![Build Status](https://travis-ci.org/apache/cordova-plugin-wkwebview-engine.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-wkwebview-engine)
+|AppVeyor|Travis CI|
+|:-:|:-:|
+|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-wkwebview-engine?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-wkwebview-engine)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-wkwebview-engine.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-wkwebview-engine)|
 
 Cordova WKWebView Engine
 ======
