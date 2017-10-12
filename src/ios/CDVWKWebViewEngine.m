@@ -431,6 +431,8 @@ static void * KVOContext = &KVOContext;
             if(errorFileExists)
             {
                 errorUrl = urlFile;
+            } else {
+                return vc.errorURL;
             }
         }
     }
