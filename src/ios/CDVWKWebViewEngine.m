@@ -400,14 +400,44 @@ static void * KVOContext = &KVOContext;
 
     NSString* message = [NSString stringWithFormat:@"Failed to load webpage with error: %@", [error localizedDescription]];
     NSLog(@"%@", message);
-
-    NSURL* errorUrl = vc.errorURL;
+    
+    NSURL* errorUrl = self.errorURL;
     if (errorUrl) {
         errorUrl = [NSURL URLWithString:[NSString stringWithFormat:@"?error=%@", [message stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] relativeToURL:errorUrl];
         NSLog(@"%@", [errorUrl absoluteString]);
-        [theWebView loadRequest:[NSURLRequest requestWithURL:errorUrl]];
+        [self loadRequest:[NSURLRequest requestWithURL:errorUrl]];
     }
 }
+
+- (NSURL*)errorURL
+{
+    CDVViewController* vc = (CDVViewController*)self.viewController;
+    NSURL* errorUrl = nil;
+    
+    id setting = [vc.settings cordovaSettingForKey:@"ErrorUrl"];
+    
+    if (setting) {
+        NSString* errorUrlString = (NSString*)setting;
+        if ([errorUrlString rangeOfString:@"://"].location != NSNotFound) {
+            errorUrl = [NSURL URLWithString:errorUrlString];
+        } else {
+            NSURL* url = [NSURL URLWithString:(NSString*)setting];
+            NSMutableArray* directoryParts = [NSMutableArray arrayWithArray:[[url path] componentsSeparatedByString:@"/"]];
+            NSString* filename = [directoryParts lastObject];
+            NSString * errorFilePath = [NSString stringWithFormat:@"%@%@", vc.wwwFolderName, filename];
+            NSFileManager *fileManager = [NSFileManager defaultManager];
+            NSURL* urlFile = [NSURL URLWithString:(NSString*)errorFilePath];
+            BOOL errorFileExists = [fileManager fileExistsAtPath:urlFile.path];
+            if(errorFileExists)
+            {
+                errorUrl = urlFile;
+            }
+        }
+    }
+    
+    return errorUrl;
+}
+
 
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView
 {
